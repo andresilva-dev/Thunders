@@ -55,4 +55,42 @@ A solução deve utilizar o template já estruturado disponível neste repositó
 Alguns componentes foram criados e disponibilizados para facilitar a implementação do teste: 
 
 - Interface ‘IMessageSender’ do projeto OutOfBox: permite o envio de mensagens para o broker. 
-- Features: para habilitar o uso de Mensageria ou Entity Framework através do padrão de configurações do .NET 
+- Features: para habilitar o uso de Mensageria ou Entity Framework através do padrão de configurações do .NET
+
+# Sobre a Solução Implementada 🚧
+
+Como parte da solução proposta, foram desenvolvidas as entidades **State**, **City**, **TollStation** e **RegisterUse**. Para cada uma delas, foi criado um conjunto de **APIs** que permitem o **cadastro** e a **consulta** das informações armazenadas.
+
+No caso da entidade `State`, foi disponibilizado apenas o endpoint de **listagem**, já que os dados referentes aos **27 estados da federação** são inseridos automaticamente via *migrations* no momento da inicialização da aplicação.
+
+Cada `RegisterUse` está obrigatoriamente vinculado a uma `TollStation`, que por sua vez pertence a uma `City`, que está relacionada a um `State`.
+
+## VehicleType 🚗🏍️🚚
+
+Foi criado também um **enumerador** chamado `VehicleType`, com a seguinte correspondência:
+
+- `0` – Moto  
+- `1` – Carro  
+- `2` – Caminhão  
+
+Esse enumerador é utilizado no cadastro de registros de uso (`RegisterUse`), que representam os dados unitários de utilização dos pedágios.
+
+## Endpoints para Processamento de Relatórios 📊
+
+Para a geração dos relatórios, foram disponibilizados **endpoints específicos** que atuam como **gatilhos de processamento**. Cada requisição a um desses endpoints retorna um **ticket (Guid)** que identifica a solicitação feita. Com esse ticket, é possível consultar o resultado posteriormente.
+
+### Endpoints de Geração de Relatório
+
+- `api/Reports/generate/total-hour-city`  
+  > Gera relatório de valor total por hora por cidade
+
+- `api/Reports/generate/top-stations-month`  
+  > Gera relatório das praças que mais faturaram no mês
+
+- `api/Reports/generate/vehicle-types-by-station`  
+  > Gera relatório de tipos de veículos que passaram por uma praça
+
+### Endpoint para Consulta de Resultado
+
+- `api/Report/result`  
+  > Consulta o resultado do relatório a partir do ticket gerado
