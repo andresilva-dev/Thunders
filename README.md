@@ -59,25 +59,35 @@ Alguns componentes foram criados e disponibilizados para facilitar a implementa�
 
 # Sobre a Solução Implementada 🚧
 
-Como parte da solução proposta, foram desenvolvidas as entidades **State**, **City**, **TollStation** e **RegisterUse**. Para cada uma delas, foi criado um conjunto de **APIs** que permitem o **cadastro** e a **consulta** das informações armazenadas.
+Como solução do projeto, foram desenvolvidas as entidades **State**, **City**, **TollStation** e **RegisterUse**. Para estas entidades, um conjunto de APIs foi disponibilizado para permitir o **cadastro** e a **consulta** das informações.
 
-No caso da entidade `State`, foi disponibilizado apenas o endpoint de **listagem**, já que os dados referentes aos **27 estados da federação** são inseridos automaticamente via *migrations* no momento da inicialização da aplicação.
+Para a entidade `State`, foi disponibilizado apenas o endpoint para **listagem de todos os estados**, os quais são **inseridos automaticamente via migrations** ao iniciar a aplicação, contemplando os **27 estados da federação**.
 
-Cada `RegisterUse` está obrigatoriamente vinculado a uma `TollStation`, que por sua vez pertence a uma `City`, que está relacionada a um `State`.
+Cada `RegisterUse` deve ser vinculado a uma `TollStation`, que por sua vez está associada a uma `City`, e esta, por fim, possui vínculo com um `State`.
 
-## VehicleType 🚗🏍️🚚
+---
 
-Foi criado também um **enumerador** chamado `VehicleType`, com a seguinte correspondência:
+## VehicleType 🚗🚛🏍️
 
-- `0` – Moto  
-- `1` – Carro  
-- `2` – Caminhão  
+Foi criado também um enumerador chamado `VehicleType`, com os seguintes valores:
 
-Esse enumerador é utilizado no cadastro de registros de uso (`RegisterUse`), que representam os dados unitários de utilização dos pedágios.
+- `0` – Moto
+- `1` – Carro
+- `2` – Caminhão
+
+Este enumerador deve ser utilizado na criação de registros `RegisterUse`, os quais representam os **registros de utilização das praças de pedágio**.
+
+---
 
 ## Endpoints para Processamento de Relatórios 📊
 
 Para a geração dos relatórios, foram disponibilizados **endpoints específicos** que atuam como **gatilhos de processamento**. Cada requisição a um desses endpoints retorna um **ticket (Guid)** que identifica a solicitação feita. Com esse ticket, é possível consultar o resultado posteriormente.
+
+Todos os endpoints estão **documentados e publicados via Swagger**, acessível em:
+
+https://localhost:porta/
+
+> Substitua `porta` pela porta onde a aplicação **ApiService** estiver sendo executada.
 
 ### Endpoints de Geração de Relatório
 
@@ -94,3 +104,4 @@ Para a geração dos relatórios, foram disponibilizados **endpoints específico
 
 - `api/Report/result`  
   > Consulta o resultado do relatório a partir do ticket gerado
+
