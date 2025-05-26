@@ -148,7 +148,7 @@ namespace Thunders.TechTest.Tests
 
             var parameters = new Dictionary<string, string>
             {
-                { "stationId", "1" }
+                { "stationId", dto.StationId.ToString() }
             };
 
             ExecuteHandler("vehiclesByStation", requestId, parameters);

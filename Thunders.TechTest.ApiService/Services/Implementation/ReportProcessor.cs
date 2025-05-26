@@ -17,24 +17,17 @@ namespace Thunders.TechTest.ApiService.Services.Implementation
         {
             object result = null;
 
-            try
+            result = reportType switch
             {
-                result = reportType switch
-                {
-                    "totalPerHourPerCity" => await GetTotalPerHourPerCity(),
-                    "topStationsByMonth" => await GetTopStationsByMonth(
-                        int.Parse(parameters["top"]),
-                        int.Parse(parameters["year"]),
-                        int.Parse(parameters["month"])),
-                    "vehiclesByStation" => await GetVehicleTypesByStation(
-                        int.Parse(parameters["stationId"])),
-                    _ => throw new ArgumentException("Unknown report type")
-                };
-            }
-            catch (Exception ex)
-            {
-            }
-            
+                "totalPerHourPerCity" => await GetTotalPerHourPerCity(),
+                "topStationsByMonth" => await GetTopStationsByMonth(
+                    int.Parse(parameters["top"]),
+                    int.Parse(parameters["year"]),
+                    int.Parse(parameters["month"])),
+                "vehiclesByStation" => await GetVehicleTypesByStation(
+                    int.Parse(parameters["stationId"])),
+                _ => throw new ArgumentException("Unknown report type")
+            };
 
             var resultKey = $"report:result:{requestId}";
             await _cache.SetAsync(resultKey, result);
