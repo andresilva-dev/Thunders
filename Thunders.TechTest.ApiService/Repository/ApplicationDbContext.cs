@@ -57,16 +57,6 @@ namespace Thunders.TechTest.ApiService.Repository
                       .WithMany()
                       .HasForeignKey(e => e.TollStationId)
                       .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.City)
-                      .WithMany()
-                      .HasForeignKey(e => e.CityId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.State)
-                      .WithMany()
-                      .HasForeignKey(e => e.StateId)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<City>(entity =>

@@ -10,18 +10,19 @@ namespace Thunders.TechTest.ApiService.Validators
             RuleFor(x => x.TollStationId)
                 .GreaterThan(0).WithMessage("O ID da praça de pedágio é obrigatório e deve ser maior que zero.");
 
-            RuleFor(x => x.CityId)
-                .GreaterThan(0).WithMessage("O ID da cidade é obrigatório e deve ser maior que zero.");
-
-            RuleFor(x => x.StateId)
-                .InclusiveBetween(1, 27)
-                .WithMessage("O ID do estado deve estar entre 1 e 27.");
-
             RuleFor(x => x.AmountPaid)
                 .GreaterThan(0).WithMessage("O valor pago deve ser maior que zero.");
 
             RuleFor(x => x.VehicleType)
                 .IsInEnum().WithMessage("O tipo de veículo é inválido.");
+
+            RuleFor(x => x.UsedAt)
+            .Must(BeInThePast).WithMessage("A data de uso deve ser anterior à data/hora atual.");
+        }
+
+        private bool BeInThePast(DateTime usedAt)
+        {
+            return usedAt <= DateTime.UtcNow;
         }
     }
 }

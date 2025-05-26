@@ -75,26 +75,12 @@ namespace Thunders.TechTest.ApiService.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TollStationId = table.Column<int>(type: "int", nullable: false),
                     UsedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CityId = table.Column<int>(type: "int", nullable: false),
-                    StateId = table.Column<int>(type: "int", nullable: false),
                     AmountPaid = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     VehicleType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RegistersUse", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RegistersUse_Cities_CityId",
-                        column: x => x.CityId,
-                        principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_RegistersUse_States_StateId",
-                        column: x => x.StateId,
-                        principalTable: "States",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RegistersUse_TollStations_TollStationId",
                         column: x => x.TollStationId,
@@ -140,16 +126,6 @@ namespace Thunders.TechTest.ApiService.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId",
                 table: "Cities",
-                column: "StateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RegistersUse_CityId",
-                table: "RegistersUse",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RegistersUse_StateId",
-                table: "RegistersUse",
                 column: "StateId");
 
             migrationBuilder.CreateIndex(

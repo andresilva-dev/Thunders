@@ -44,6 +44,7 @@ namespace Thunders.TechTest.ApiService.Repository.Implementation
         {
             return await _applicationDbContext.TollStations
                 .Include(t => t.City)
+                .ThenInclude(c => c.State)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(ts => ts.Id == id);
         }

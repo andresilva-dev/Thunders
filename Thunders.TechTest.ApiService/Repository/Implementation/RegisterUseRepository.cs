@@ -1,4 +1,5 @@
-﻿using Thunders.TechTest.ApiService.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Thunders.TechTest.ApiService.Entities;
 using Thunders.TechTest.ApiService.Repository.Interfaces;
 
 namespace Thunders.TechTest.ApiService.Repository.Implementation
@@ -12,21 +13,20 @@ namespace Thunders.TechTest.ApiService.Repository.Implementation
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task AddRegisterUseAsync(RegisterUse registerUse)
+        public async Task<int> AddRegisterUseAsync(RegisterUse registerUse)
         {
             _applicationDbContext.RegistersUse.Add(registerUse);
-            await _applicationDbContext.SaveChangesAsync();
+            return await _applicationDbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<RegisterUse> GetByIdAsync(int id)
         {
-            var registerUse = await _applicationDbContext.RegistersUse.FindAsync(id);
-
-            if (registerUse == null)
-                throw new KeyNotFoundException($"RegisterUse with ID {id} not found.");
-
-            _applicationDbContext.RegistersUse.Remove(registerUse);
-            await _applicationDbContext.SaveChangesAsync();
+            return await _applicationDbContext.RegistersUse
+                .Include(r => r.TollStation)
+                .ThenInclude(t => t.City)
+                .ThenInclude(c => c.State)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
     }
 }

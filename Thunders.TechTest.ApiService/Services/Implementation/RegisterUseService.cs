@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Thunders.TechTest.ApiService.Dto;
 using Thunders.TechTest.ApiService.Entities;
 using Thunders.TechTest.ApiService.Repository.Interfaces;
@@ -12,30 +13,20 @@ namespace Thunders.TechTest.ApiService.Services.Implementation
         private readonly IStateRepository _stateRepository;
         private readonly ICityRepository _cityRepository;
         private readonly ITollStationRepository _tollStationRepository;
+        private readonly ICacheService _cacheService;
 
         public RegisterUseService(IRegisterUseRepository registerUseRepository, IStateRepository stateRepository, 
-            ICityRepository cityRepository, ITollStationRepository tollStationRepository)
+            ICityRepository cityRepository, ITollStationRepository tollStationRepository, ICacheService cacheService)
         {
             _registerUseRepository = registerUseRepository;
             _stateRepository = stateRepository;
             _cityRepository = cityRepository;
             _tollStationRepository = tollStationRepository;
+            _cacheService = cacheService;
         }
 
-        public async Task AddRegisterUseAsync(RegisterUseDto registerUseDto)
+        public async Task<int> AddRegisterUseAsync(RegisterUseDto registerUseDto)
         {
-            var city = await _cityRepository.GetByIdAsync(registerUseDto.CityId);
-            if (city == null)
-            {
-                throw new ValidationException($"City with ID: {registerUseDto.CityId} not found.");
-            }
-
-            var state = await _stateRepository.GetByIdAsync(registerUseDto.StateId);
-            if (state == null)
-            {
-                throw new ValidationException($"State with ID: {registerUseDto.StateId} not found.");
-            }
-
             var tollStation = await _tollStationRepository.GetByIdAsync(registerUseDto.TollStationId);
             if (tollStation == null)
             {
@@ -44,30 +35,17 @@ namespace Thunders.TechTest.ApiService.Services.Implementation
 
             var entity = new RegisterUse
             {
-                UsedAt = DateTime.UtcNow,  
+                UsedAt = registerUseDto.UsedAt,
                 TollStationId = registerUseDto.TollStationId,
-                CityId = registerUseDto.CityId,
-                StateId = registerUseDto.StateId,
                 AmountPaid = registerUseDto.AmountPaid,
                 VehicleType = registerUseDto.VehicleType
             };
 
-            await _registerUseRepository.AddRegisterUseAsync(entity);
-        }
+            var id = await _registerUseRepository.AddRegisterUseAsync(entity);
+            entity = await _registerUseRepository.GetByIdAsync(entity.Id);
+            await _cacheService.SetAsync(entity.Id.ToString(), entity);
 
-        public Task GetTopTollStationsByMonthAsync(int month, int year, int top)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task GetTotalAmountPerHourByCityAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task GetQtdVehicleTypesByTollStationAsync(string tollStationName)
-        {
-            throw new NotImplementedException();
+            return id;
         }
     }
 }

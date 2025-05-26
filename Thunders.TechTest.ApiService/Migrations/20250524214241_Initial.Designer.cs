@@ -12,7 +12,7 @@ using Thunders.TechTest.ApiService.Repository;
 namespace Thunders.TechTest.ApiService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250523173814_Initial")]
+    [Migration("20250524214241_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -59,12 +59,6 @@ namespace Thunders.TechTest.ApiService.Migrations
                     b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TollStationId")
                         .HasColumnType("int");
 
@@ -75,10 +69,6 @@ namespace Thunders.TechTest.ApiService.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("StateId");
 
                     b.HasIndex("TollStationId");
 
@@ -309,27 +299,11 @@ namespace Thunders.TechTest.ApiService.Migrations
 
             modelBuilder.Entity("Thunders.TechTest.ApiService.Entities.RegisterUse", b =>
                 {
-                    b.HasOne("Thunders.TechTest.ApiService.Entities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Thunders.TechTest.ApiService.Entities.State", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Thunders.TechTest.ApiService.Entities.TollStation", "TollStation")
                         .WithMany()
                         .HasForeignKey("TollStationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("State");
 
                     b.Navigation("TollStation");
                 });

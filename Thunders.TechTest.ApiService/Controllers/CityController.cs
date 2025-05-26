@@ -51,8 +51,8 @@ namespace Thunders.TechTest.ApiService.Controllers
 
             try
             {
-                await _cityService.AddAsync(cityDto);
-                return Created();
+                var id = await _cityService.AddAsync(cityDto);
+                return Ok(new { Id = id });
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace Thunders.TechTest.ApiService.Controllers
             try
             {
                 await _cityService.UpdateAsync(id, cityDto);
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace Thunders.TechTest.ApiService.Controllers
             try
             {
                 await _cityService.DeleteAsync(id);
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {

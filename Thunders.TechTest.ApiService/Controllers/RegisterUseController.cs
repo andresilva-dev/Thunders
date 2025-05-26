@@ -25,7 +25,7 @@ namespace Thunders.TechTest.ApiService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegistrarUtilizacao([FromBody] RegisterUseDto dto)
+        public async Task<IActionResult> CreateRegistereUse([FromBody] RegisterUseDto dto)
         {
             ValidationResult validationResult = await _validator.ValidateAsync(dto);
 
@@ -40,8 +40,8 @@ namespace Thunders.TechTest.ApiService.Controllers
 
             try
             {
-                await _registerUseService.AddRegisterUseAsync(dto);
-                return Created();
+                var id = await _registerUseService.AddRegisterUseAsync(dto);
+                return Ok(new { Id = id });
             }
             catch (Exception ex)
             {
@@ -51,73 +51,7 @@ namespace Thunders.TechTest.ApiService.Controllers
                 return StatusCode(500, message);
             }
         }
-
-        /// <summary>
-        /// Valor total por hora por cidade
-        /// </summary>
-        [HttpGet("relatorio/valor-total-por-hora-cidade")]
-        public async Task<IActionResult> GetTotalByHourAndCity()
-        {
-            try
-            {
-                //var result = await _registerUseService.GetTotalAmountPerHourByCityAsync();
-                //return Ok(result);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                var message = "Error ocurred during try get total by hour and city.";
-
-                _logger.LogError(ex, message);
-                return StatusCode(500, message);
-            }
-            
-        }
-
-        /// <summary>
-        /// Praças que mais faturaram por mês
-        /// </summary>
-        [HttpGet("relatorio/top-pracas-faturamento")]
-        public async Task<IActionResult> GetTopTollStationsByMonth([FromQuery] int month, [FromQuery] int year, [FromQuery] int top = 5)
-        {
-            try
-            {
-                //var result = await _registerUseService.GetTopTollStationsByMonthAsync(month, year, top);
-                //return Ok(result);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                var message = "Error ocurred during try get top tollstations by mounth.";
-
-                _logger.LogError(ex, message);
-                return StatusCode(500, message);
-            }
-        }
-
-        /// <summary>
-        /// Tipos de veículos que passaram por uma praça
-        /// </summary>
-        [HttpGet("relatorio/tipos-veiculos-por-praca")]
-        public async Task<IActionResult> GetQtdVehicleTypesByTollStation([FromQuery] string tollStationName)
-        {
-            try
-            {
-                //var result = await _registerUseService.GetQtdVehicleTypesByTollStationAsync(tollStationName);
-                //return Ok(result);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                var message = "Error ocurred during try get quantity vehicle types by tollstations by mounth.";
-
-                _logger.LogError(ex, message);
-                return StatusCode(500, message);
-            }
-            
-        }
     }
-
 }
 
 

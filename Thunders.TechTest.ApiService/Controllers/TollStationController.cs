@@ -24,15 +24,34 @@ namespace Thunders.TechTest.ApiService.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _tollStationService.GetAllAsync();
-            return Ok(result);
+            try
+            {
+                var result = await _tollStationService.GetAllAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                var message = "Error occurred while try get all toll station.";
+                _logger.LogError(ex, message);
+                return StatusCode(500, message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _tollStationService.GetByIdAsync(id);
-            return result != null ? Ok(result) : NotFound();
+            try
+            {
+                var result = await _tollStationService.GetByIdAsync(id);
+                return result != null ? Ok(result) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                var message = "Error occurred while try get toll station by id.";
+                _logger.LogError(ex, message);
+                return StatusCode(500, message);
+            }
+           
         }
 
         [HttpPost]
@@ -51,12 +70,12 @@ namespace Thunders.TechTest.ApiService.Controllers
 
             try
             {
-                await _tollStationService.AddAsync(dto);
-                return Created();
+                var id = await _tollStationService.AddAsync(dto);
+                return Ok(new { Id = id});
             }
             catch (Exception ex)
             {
-                const string message = "Error occurred while creating toll station.";
+                var message = "Error occurred while creating toll station.";
                 _logger.LogError(ex, message);
                 return StatusCode(500, message);
             }
@@ -79,7 +98,7 @@ namespace Thunders.TechTest.ApiService.Controllers
             try
             {
                 await _tollStationService.UpdateAsync(id, dto);
-                return NoContent();
+                return Ok();
             }
             catch (Exception ex)
             {
